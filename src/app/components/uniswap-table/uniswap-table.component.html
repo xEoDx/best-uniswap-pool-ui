@@ -1,0 +1,37 @@
+Blockchain
+<ng-select (close)="onBlockchainChanged($event)" [items]="blockchains" bindLabel="name" bindValue="id" autofocus [(ngModel)]="selectedBlockchain">
+</ng-select>
+<br>
+Selected: {{selectedBlockchain}}
+<br>
+Risk
+<ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)">
+   <ng-option *ngFor="let risk of risks" [value]="risk.id">{{risk.name}}</ng-option>
+</ng-select>
+
+<br>
+
+<div class="container">
+	<div class="table-responsive">
+<table class="table table-bordered table-hover" matSort (matSortChange)="sortData($event)">
+	<thead>
+		<tr>
+			<th mat-sort-header="pool"><strong>Pool</strong></th>
+			<th mat-sort-header="fee"><strong>Fee tier</strong></th>
+			<th mat-sort-header="tvl"><strong>TVL</strong></th>
+			<th mat-sort-header="volume"><strong>Volume</strong></th>
+			<th mat-sort-header="score"><strong>Score</strong></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let pool of sortedData">
+			<th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
+			<th><p>{{pool.feeTier / 10000}}%</p></th>
+			<th><p>{{parseDollars(pool.tvl)}}</p></th>
+			<th><p>{{parseDollars(pool.volume)}}</p></th>
+			<th><p>{{pool.score}}</p></th>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
