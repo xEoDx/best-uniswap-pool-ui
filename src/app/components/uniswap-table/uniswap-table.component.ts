@@ -16,8 +16,8 @@ export class UniswapTableComponent implements OnInit {
   allPools: Array<Pool>;
   sortedData: Array<Pool>;
 
-  selectedBlockchain: number = 0;
-  blockchains = [{id: 0, name: 'Ethereum'}, {id: 1, name: 'Polygon'}];
+  selectedBlockchain: Blockchain = Blockchain.Ethereum;
+  blockchains = [{id: Blockchain.Ethereum, name: 'Ethereum'}, {id: Blockchain.Polygon, name: 'Polygon'}];
 
   selectedRisk: number = 0;
   risks = [{id:0,name:'Low'}, {id:1,name:'Moderate'}, {id:2,name:'High'}];
@@ -98,11 +98,10 @@ export class UniswapTableComponent implements OnInit {
   private applyFilters(): void {
     this.sortedData = [];
 
-    let blockChain: Blockchain = this.selectedBlockchain as Blockchain;
     let risk: RiskFilter = this.selectedRisk as RiskFilter;
-
+    
     this.allPools.forEach(pool => {
-        if(this.isFromBlockchain(pool,blockChain) && this.isWithinRisk(pool, risk)){
+        if(this.isFromBlockchain(pool, this.selectedBlockchain) && this.isWithinRisk(pool, risk)) {      
           this.sortedData.push(pool);
         }
     });
@@ -110,7 +109,18 @@ export class UniswapTableComponent implements OnInit {
   }
 
   private isFromBlockchain(pool: Pool, blockchain: Blockchain): boolean {
-    return pool.blockChain === blockchain;
+    return (pool.blockChain+'') === Blockchain[blockchain];
+  }
+
+  private parseBlockchain(blockchain: Blockchain): number{
+    switch(blockchain) {
+      case Blockchain.Ethereum:
+        return 0;
+      case Blockchain.Polygon:
+        return 1;
+      default:
+        return -1;
+    }
   }
 
   private isWithinRisk(pool: Pool, risk:RiskFilter): boolean {
@@ -124,6 +134,7 @@ export class UniswapTableComponent implements OnInit {
       case RiskFilter.Low:
 
         lowRiskTokens.forEach(value => {
+          console.log("pool: ",pool);
           if(!token0Allowed && pool.token0.name.includes(value)){
             token0Allowed = true;            
           }

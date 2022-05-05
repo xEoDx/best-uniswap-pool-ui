@@ -2,7 +2,6 @@ Blockchain
 <ng-select (close)="onBlockchainChanged($event)" [items]="blockchains" bindLabel="name" bindValue="id" autofocus [(ngModel)]="selectedBlockchain">
 </ng-select>
 <br>
-Selected: {{selectedBlockchain}}
 <br>
 Risk
 <ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)">
