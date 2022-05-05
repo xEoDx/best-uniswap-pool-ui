@@ -4,7 +4,7 @@ import { Pool } from '../models/pool';
 
 import { Token } from '../models/token';
 import { Blockchain } from '../models/blockchain';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +23,9 @@ export class UniswapDataFetcherService {
         this._pools = this.getDummyData();
       } else {
         const url = environment.apiEndpoint + '/pools';
-        this.http.get<Array<Pool>>(url).pipe(map(response => {
-          this._pools = response;  
-        }));
+        this.http.get<Array<Pool>>(url).subscribe((response) => {
+          this._pools = response as Array<Pool>;  
+        });
       }
     }
 
