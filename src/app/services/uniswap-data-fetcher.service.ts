@@ -4,6 +4,7 @@ import { Pool } from '../models/pool';
 
 import { Token } from '../models/token';
 import { Blockchain } from '../models/blockchain';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,16 @@ export class UniswapDataFetcherService {
   }
 
   public getAll() : Promise<Array<Pool>> {
+  
     if(this._pools === null || this._pools.length === 0){
-      //this.http.get("...",)...
-      this._pools = this.getDummyData(); // TODO replace with httpClient call
+      if(environment.isLocalEnv) {
+        this._pools = this.getDummyData();
+      } else {
+        const url = environment.apiEndpoint + '/pools';
+        this.http.get<Array<Pool>>(url).pipe(map(response => {
+          this._pools = response;  
+        }));
+      }
     }
 
     return new Promise(resolve => {resolve(this._pools)});
