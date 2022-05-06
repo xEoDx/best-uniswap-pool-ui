@@ -17,7 +17,7 @@ export class UniswapTableComponent implements OnInit {
   sortedData: Array<Pool>;
 
   selectedBlockchain: Blockchain = Blockchain.Ethereum;
-  blockchains = [{id: Blockchain.Ethereum, name: 'Ethereum'}, {id: Blockchain.Polygon, name: 'Polygon'}];
+  blockchains = [{id: Blockchain.Ethereum, name: 'Ethereum', icon:'ethereum.png'}, {id: Blockchain.Polygon, name: 'Polygon', icon:'polygon.png'}];
 
   selectedRisk: number = 0;
   risks = [{id:0,name:'Low'}, {id:1,name:'Moderate'}, {id:2,name:'High'}];

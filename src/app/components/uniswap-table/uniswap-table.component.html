@@ -1,31 +1,48 @@
-Blockchain
-<ng-select (close)="onBlockchainChanged($event)" [items]="blockchains" bindLabel="name" bindValue="id" autofocus [(ngModel)]="selectedBlockchain">
-</ng-select>
-<br>
-<br>
-Risk
-<ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)">
-   <ng-option *ngFor="let risk of risks" [value]="risk.id">{{risk.name}}</ng-option>
-</ng-select>
-
-<br>
-
 <div class="container">
+	<div class="row">
+		<div class="form-group mb-2">
+
+		<label for="blockchainSelector" class="col-sm-2 col-form-label">Blockchain</label>
+	   <div class="col-sm-2">
+			<ng-select id="blockchainSelector" (close)="onBlockchainChanged($event)" [(ngModel)]="selectedBlockchain" [clearable]="false">
+				<ng-option *ngFor="let blockchain of blockchains" [value]="blockchain.id">
+					<img src="assets/{{blockchain.icon}}" width="18" height="18" />
+
+
+					<label class="blockchain-select-label">{{blockchain.name}}</label>
+			</ng-option>
+			</ng-select>
+		</div>
+	</div>
+	<div class="form-group mb-2">
+	<label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
+	   <div class="col-sm-4">
+
+	<ng-select id="riskSelector" [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)" [clearable]="false">
+	   <ng-option *ngFor="let risk of risks" [value]="risk.id" >{{risk.name}}</ng-option>
+	</ng-select>
+	</div>
+	</div>
+	</div>
+</div>
+<br>
+
+<div class="container border border-0 rounded uniswap-table">
 	<div class="table-responsive">
-<table class="table table-bordered table-hover" matSort (matSortChange)="sortData($event)">
+<table class="table table-hover" matSort (matSortChange)="sortData($event)">
 	<thead>
 		<tr>
 			<th mat-sort-header="pool"><strong>Pool</strong></th>
 			<th mat-sort-header="fee"><strong>Fee tier</strong></th>
 			<th mat-sort-header="tvl"><strong>TVL</strong></th>
-			<th mat-sort-header="volume"><strong>Volume</strong></th>
+			<th mat-sort-header="volume"><strong>Volume (5D)</strong></th>
 			<th mat-sort-header="score"><strong>Score</strong></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr *ngFor="let pool of sortedData">
 			<th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
-			<th><p>{{pool.feeTier / 10000}}%</p></th>
+			<th><span class="badge badge-pill badge-secondary">{{pool.feeTier / 10000}}%</span></th>
 			<th><p>{{parseDollars(pool.tvl)}}</p></th>
 			<th><p>{{parseDollars(pool.volume)}}</p></th>
 			<th><p>{{pool.score}}</p></th>
