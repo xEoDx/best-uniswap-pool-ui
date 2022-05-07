@@ -21,12 +21,8 @@ export class UniswapDataFetcherService {
     if(this._pools === null || this._pools.length === 0){
       if(environment.isLocalEnv) {
         this.getDummyData().pools.forEach((p:any) => {
-              let token0: Token = new Token(p._token0._name);
-              let token1: Token = new Token(p._token1._name);
-
-              let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, p._volume, token0, token1);
-              this._pools.push(pool);
-            });
+            this.addPool(p);
+        });
         return new Promise<Array<Pool>>(resolve => {resolve(this._pools)});
 
       } else {
@@ -36,11 +32,7 @@ export class UniswapDataFetcherService {
             next: (res: any) => {
 
             res.pools.forEach((p:any) => {
-              let token0: Token = new Token(p._token0._name);
-              let token1: Token = new Token(p._token1._name);
-
-              let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, p._volume, token0, token1);
-              this._pools.push(pool);
+              this.addPool(p);
             });
             resolve(this._pools);
             },
@@ -57,6 +49,17 @@ export class UniswapDataFetcherService {
     } else{
       return new Promise<Array<Pool>>(resolve => {resolve(this._pools)});
     }    
+  }
+
+  private addPool(p:any): void{
+    if(p._volume < 1000){
+      return;
+    }
+    let token0: Token = new Token(p._token0._name);
+    let token1: Token = new Token(p._token1._name);
+
+    let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, p._volume, token0, token1);
+    this._pools.push(pool);
   }
 
   private getDummyData(): any{

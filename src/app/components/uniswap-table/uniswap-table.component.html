@@ -1,9 +1,9 @@
 <div class="container">
 	<div class="row">
-		<div class="form-group mb-2">
+		<div class="col-sm-4">
 
 		<label for="blockchainSelector" class="col-sm-2 col-form-label">Blockchain</label>
-	   <div class="col-sm-2">
+	   <div class="col-sm-6">
 			<ng-select id="blockchainSelector" (close)="onBlockchainChanged($event)" [(ngModel)]="selectedBlockchain" [clearable]="false">
 				<ng-option *ngFor="let blockchain of blockchains" [value]="blockchain.id">
 					<img src="assets/{{blockchain.icon}}" width="18" height="18" />
@@ -14,20 +14,27 @@
 			</ng-select>
 		</div>
 	</div>
-	<div class="form-group mb-2">
+	<div class="col-sm-4">
 	<label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
-	   <div class="col-sm-4">
+	   <div class="col-sm-6">
 
 	<ng-select id="riskSelector" [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)" [clearable]="false">
 	   <ng-option *ngFor="let risk of risks" [value]="risk.id" >{{risk.name}}</ng-option>
 	</ng-select>
 	</div>
 	</div>
+	<div class="col-sm-4">
+		<label for="poolSearch" class="col-sm-2 col-form-label">Search</label>
+	   <div class="col-sm-6">
+	   	<input class="form-control" placeholder="WETH USD" type="text" name="poolSearch" id="poolSearch" (keyup)="onSearchChanged($event)" [(ngModel)]="nameFilter" ng-trim="true" />
+	   </div>
+	</div>
 	</div>
 </div>
 <br>
 
 <div class="container border border-0 rounded uniswap-table">
+	<h2>Pools</h2>
 	<div class="table-responsive">
 <table class="table table-hover" matSort (matSortChange)="sortData($event)">
 	<thead>
@@ -42,10 +49,10 @@
 	<tbody>
 		<tr *ngFor="let pool of sortedData">
 			<th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
-			<th><span class="badge badge-pill badge-secondary">{{pool.feeTier / 10000}}%</span></th>
+			<th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
 			<th><p>{{parseDollars(pool.tvl)}}</p></th>
 			<th><p>{{parseDollars(pool.volume)}}</p></th>
-			<th><p>{{pool.score}}</p></th>
+			<th><p>{{pool.score.toFixed(4)}}</p></th>
 		</tr>
 	</tbody>
 </table>

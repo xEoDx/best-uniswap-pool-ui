@@ -1,0 +1,15 @@
+footer {
+    position: fixed;
+    height: 80px;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(40,40,40);
+}
+
+.div-donate{
+    padding-top: 15px;
+}
+
+.title{
+    padding-top:  20px;
+}

@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
+import {MatDialogModule} from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 
@@ -14,12 +15,14 @@ import { UniswapTableComponent } from './components/uniswap-table/uniswap-table.
 import { UniswapDataFetcherService } from './services/uniswap-data-fetcher.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DonationDialogComponent } from './components/donation-dialog/donation-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    UniswapTableComponent
+    UniswapTableComponent,
+    DonationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatNativeDateModule,
     MatTableModule,
     MatSortModule,
+    MatDialogModule,
     NgSelectModule,
     FormsModule
   ],

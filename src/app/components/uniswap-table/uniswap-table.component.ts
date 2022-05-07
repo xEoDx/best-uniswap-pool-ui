@@ -16,6 +16,8 @@ export class UniswapTableComponent implements OnInit {
   allPools: Array<Pool>;
   sortedData: Array<Pool>;
 
+  nameFilter: string = '';
+
   selectedBlockchain: Blockchain = Blockchain.Ethereum;
   blockchains = [{id: Blockchain.Ethereum, name: 'Ethereum', icon:'ethereum.png'}, {id: Blockchain.Polygon, name: 'Polygon', icon:'polygon.png'}];
 
@@ -101,7 +103,7 @@ export class UniswapTableComponent implements OnInit {
     let risk: RiskFilter = this.selectedRisk as RiskFilter;
     
     this.allPools.forEach(pool => {
-        if(this.isFromBlockchain(pool, this.selectedBlockchain) && this.isWithinRisk(pool, risk)) {      
+        if(this.isFromBlockchain(pool, this.selectedBlockchain) && this.isWithinRisk(pool, risk) && this.poolHasTokensName(pool, this.nameFilter)) {      
           this.sortedData.push(pool);
         }
     });
@@ -134,7 +136,6 @@ export class UniswapTableComponent implements OnInit {
       case RiskFilter.Low:
 
         lowRiskTokens.forEach(value => {
-          console.log("pool: ",pool);
           if(!token0Allowed && pool.token0.name.includes(value)){
             token0Allowed = true;            
           }
@@ -166,7 +167,41 @@ export class UniswapTableComponent implements OnInit {
         return true;
     }
   }
-  
+
+  private poolHasTokensName(pool:Pool, filterName:string): boolean {
+    if(filterName === ''){
+      return true;
+    }
+    
+    const token0Name = pool.token0.name.toLowerCase();
+    const token1Name = pool.token1.name.toLowerCase();
+    const filter = filterName.toLowerCase();
+    
+    const spaceSplitFilter = filter.split(" ");    
+    if(spaceSplitFilter.length > 1) {
+        return token0Name.includes(spaceSplitFilter[0]) && token1Name.includes(spaceSplitFilter[1]);
+    }
+
+    const dashSplitFilter = filter.split("-");
+    if(dashSplitFilter.length > 1){
+      return token0Name.includes(dashSplitFilter[0]) && token1Name.includes(dashSplitFilter[1]);
+    }
+
+    const slashSplitFilter = filter.split("/");
+    if(slashSplitFilter.length > 1){
+      return token0Name.includes(slashSplitFilter[0]) && token1Name.includes(slashSplitFilter[1]);
+    }    
+    
+    
+
+    return token0Name.includes(filter) || token1Name.includes(filter);
+  }
+
+  public onSearchChanged(event:any) {
+    this.applyFilters();
+  }
+
+
 
   public compare(a: number | string, b: number | string, isAsc: boolean): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);

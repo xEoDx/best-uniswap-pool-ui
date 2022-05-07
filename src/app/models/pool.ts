@@ -25,7 +25,7 @@ export class Pool {
     }
 
     public get feeTier(): number {
-        return this._feeTier;
+        return this._feeTier / 10000;
     }
 
     public get token0(): Token {
@@ -48,7 +48,7 @@ export class Pool {
         if (this.volume <= 0) {
             return 0;
         }
-        return Math.round(this.feeTier * this.volume / this.tvl);
+        return (this.feeTier * this.volume / this.tvl);
     }
 
     public get blockChain(): Blockchain {
