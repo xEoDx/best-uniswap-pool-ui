@@ -5,7 +5,7 @@ import { RiskFilter } from '../../models/risk-filter';
 import { Blockchain } from '../../models/blockchain';
 import { UniswapDataFetcherService } from '../../services/uniswap-data-fetcher.service';
 import { environment } from '../../../environments/environment';
-
+import { Gtag } from 'angular-gtag';
 
 @Component({
   selector: 'app-uniswap-table',
@@ -25,7 +25,7 @@ export class UniswapTableComponent implements OnInit {
   risks = [{id:0,name:'Low'}, {id:1,name:'Moderate'}, {id:2,name:'High'}];
 
 
-  constructor(private uniswapService: UniswapDataFetcherService) { 
+  constructor(private uniswapService: UniswapDataFetcherService, public gtag: Gtag) { 
     this.allPools = new Array<Pool>();
     this.sortedData = new Array<Pool>();
   }
@@ -91,10 +91,17 @@ export class UniswapTableComponent implements OnInit {
 
   onBlockchainChanged($event:any){
     this.applyFilters();
+    const blockChainTrackingData: string = 'blockchain-'+this.selectedBlockchain;
+    this.gtag.event('filter_pools', {
+      method: 'blockchain',
+      specific: blockChainTrackingData
+    });
   }
 
   onRiskChanged(risk:any){
    this.applyFilters(); 
+   const riskTrackingData: string = 'risk-'+this.selectedRisk;
+    this.gtag.event('filter_pools', {method: 'risk', specific: riskTrackingData});
   }
 
   private applyFilters(): void {
@@ -172,6 +179,9 @@ export class UniswapTableComponent implements OnInit {
     if(filterName === ''){
       return true;
     }
+
+    const poolFilterTrackingData:string = 'pool-name-'+filterName;
+    this.gtag.event('filter_pools', {method: 'name', specific: poolFilterTrackingData});
     
     const token0Name = pool.token0.name.toLowerCase();
     const token1Name = pool.token1.name.toLowerCase();
@@ -190,8 +200,7 @@ export class UniswapTableComponent implements OnInit {
     const slashSplitFilter = filter.split("/");
     if(slashSplitFilter.length > 1){
       return token0Name.includes(slashSplitFilter[0]) && token1Name.includes(slashSplitFilter[1]);
-    }    
-    
+    }       
     
 
     return token0Name.includes(filter) || token1Name.includes(filter);

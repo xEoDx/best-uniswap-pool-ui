@@ -7,6 +7,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatDialogModule} from '@angular/material/dialog';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { GtagModule } from 'angular-gtag';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,7 +36,9 @@ import { DonationDialogComponent } from './components/donation-dialog/donation-d
     MatSortModule,
     MatDialogModule,
     NgSelectModule,
-    FormsModule
+    FormsModule,
+    GtagModule.forRoot({ trackingId: 'G-LTLKGZLW9W', trackPageviews: true })
+
   ],
   providers: [],
   bootstrap: [AppComponent]

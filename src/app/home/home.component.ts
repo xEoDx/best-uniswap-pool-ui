@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import { Gtag } from 'angular-gtag';
+
 import {DonationDialogComponent} from '../components/donation-dialog/donation-dialog.component'
 
 
@@ -10,12 +12,14 @@ import {DonationDialogComponent} from '../components/donation-dialog/donation-di
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public gtag: Gtag) { }
 
   ngOnInit(): void {
   }
 
   openDialog() {
+    this.gtag.event('open_donation_dialog');
+
     const dialogRef = this.dialog.open(DonationDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
