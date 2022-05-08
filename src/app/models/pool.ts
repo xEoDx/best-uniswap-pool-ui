@@ -48,7 +48,7 @@ export class Pool {
         if (this.volume <= 0) {
             return 0;
         }
-        return (this.feeTier * this.volume / this.tvl);
+        return (this.feeTier * this.volume / this.tvl) / 100;
     }
 
     public get blockChain(): Blockchain {

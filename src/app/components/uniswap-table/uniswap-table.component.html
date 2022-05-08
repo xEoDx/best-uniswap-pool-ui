@@ -43,7 +43,7 @@
 			<th mat-sort-header="fee"><strong>Fee tier</strong></th>
 			<th mat-sort-header="tvl"><strong>TVL</strong></th>
 			<th mat-sort-header="volume"><strong>Volume (5D)</strong></th>
-			<th mat-sort-header="score"><strong>Score</strong></th>
+			<th mat-sort-header="score"><strong>Avg. gain / dollar provided (5D)</strong></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -52,7 +52,7 @@
 			<th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
 			<th><p>{{parseDollars(pool.tvl)}}</p></th>
 			<th><p>{{parseDollars(pool.volume)}}</p></th>
-			<th><p>{{pool.score.toFixed(4)}}</p></th>
+			<th><p>{{pool.score.toFixed(6)}}$</p></th>
 		</tr>
 	</tbody>
 </table>
