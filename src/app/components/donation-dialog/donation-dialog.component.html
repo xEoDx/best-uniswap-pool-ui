@@ -1,19 +1,19 @@
-<h2 mat-dialog-title>Thanks for using PoolAnalyzer</h2>
+<h2 mat-dialog-title>Thanks for using Pool Analyzer</h2>
 <mat-dialog-content class="mat-typography">
   <h3><b>How does it work?</b></h3>
-  <p>Every 12h we compute all transactions done in the last 5 days on the Ethereum and Polygon networks, to be able to determine which is the best pool to provide liquidity. You can use this information to move your funds from existing pools or to create new positions based on the score parameter.</p>
+  <p>Check the <b>Avg. gain / dollar provided</b> column to know what pools are giving more comissions. The value is calculated based on the volume, tvl and the fee of the pool, but it doesn't take into account ranges. In order to do this calculation, every 12h we process all transactions done in the last 5 days on the Ethereum and Polygon blockchains.</p>
 
-  <h3><b>Avg. gain / dollar provided</b></h3>
-  <p>This value is calculated based on the volume, tvl and the fee of the pool. This is based on the last 5 days, but it provides useful data on which are the pools that will give more commissions.</p>
+  <p>The higher the avg. gain / dollar, the better. But please take into account that some pools are prone to have higher Impermanent Loss, so be aware of this and also consider having proper ranges on the pool, so that you keep earning comissions.</p>
 
   <h3><b>Server cost</b></h3>
   <p>Hosting this application has a cost. Any donation will help to mitigate the costs of maintaining the setup alive.</p>
 
-  <h3><b>How can you contribute?</b></h3>
+  <h3><b>Want to contribute?</b></h3>
 
-  <p>If you found this innitiative useful and want to contribute to the maintenance of the app, you can donate ETH, USDC, USDT, MATIC to this address: </p>
+  <p>If you want this innitiative to continue running and improving, you can donate ETH, USDC, USDT, MATIC to this address: </p>
   <p><strong>0x3a0E98D352811cE9efFf56a57C7C859193472c77</strong></p>
+  <p>I will be happy to hear from you, in case you have any advice or doubt. Please send me an e-mail to: <br>contact@poolanalyzer.com</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button class="btn btn-primary" mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+  <button class="btn btn-donation" mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
 </mat-dialog-actions>

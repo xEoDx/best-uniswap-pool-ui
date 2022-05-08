@@ -1,1 +1,10 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
+
+
+.btn-donation {
+    background-color: #ff8c8c;
+}
+
+.btn-donation:hover {
+    background-color: #ffc5c5;
+}
