@@ -19,11 +19,17 @@ export class HomeComponent implements OnInit {
 
   openDialog() {
     this.gtag.event('open_donation_dialog');
+    const openedDate: Date = new Date();
 
     const dialogRef = this.dialog.open(DonationDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      const closeDate: Date = new Date();
+      const elapsedTime: number = (closeDate.getTime() - openedDate.getTime()) / 1000;
+
+      this.gtag.event('close_donation_dialog', {
+        elapsed_time: elapsedTime
+      });
     });
   }
 }
