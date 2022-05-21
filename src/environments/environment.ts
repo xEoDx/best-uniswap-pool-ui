@@ -1,7 +1,7 @@
 
 export const environment = {
   production: false,
-  isLocalEnv: false,
+  isLocalEnv: true,
   apiEndpoint: 'http://localhost:3000/api/v1',
   filter: {
     low: ["BTC", "ETH", "USD", "UST", "DAI", "MATIC"],
