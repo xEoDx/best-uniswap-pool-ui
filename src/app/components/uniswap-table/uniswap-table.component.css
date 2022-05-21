@@ -39,3 +39,7 @@ p{
     padding-left: 0.6em;
     border-radius: 10rem;
 }
+
+.pool-row {
+    cursor: pointer;
+}

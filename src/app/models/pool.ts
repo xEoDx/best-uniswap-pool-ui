@@ -1,16 +1,18 @@
 import { Blockchain } from "./blockchain";
 import { Token } from "./token";
+import { PoolVolumeInterval } from "./pool-volume-interval";
 
 export class Pool {
+    private static ScoreDollarsMultiplier = 100; 
     private _id: string;
     private _blockchain: Blockchain;
     private _feeTier: number;
     private _tvl: number;
-    private _volumes: Map<number, number>;
+    private _volumes: Array<PoolVolumeInterval>;
     private _token0: Token;
     private _token1: Token;
 
-    constructor(id: string, blockchain: Blockchain, feeTier: number, tvl: number, volumes: Map<number, number>, token0: Token, token1: Token) {
+    constructor(id: string, blockchain: Blockchain, feeTier: number, tvl: number, volumes: Array<PoolVolumeInterval>, token0: Token, token1: Token) {
         this._id = id;
         this._blockchain = blockchain;
         this._feeTier = feeTier;
@@ -18,15 +20,6 @@ export class Pool {
         this._token0 = token0;
         this._token1 = token1;
         this._volumes = volumes;
-    }
-
-    public addVolume(volume: number, daysInterval:number): void {
-        if(!this._volumes.has(daysInterval)) {
-            this._volumes.set(daysInterval, volume);
-        } else{
-            const previousVolume: number = this._volumes.get(daysInterval) ?? 0;
-            this._volumes.set(daysInterval, previousVolume + volume);
-        }
     }
 
     public get feeTier(): number {
@@ -41,7 +34,7 @@ export class Pool {
         return this._token1;
     }
 
-    public get volumes(): Map<number, number> {
+    public get volumes(): Array<PoolVolumeInterval> {
         return this._volumes;
     }
 
@@ -50,17 +43,14 @@ export class Pool {
     }
 
     public score(dayInterval: number): number {
-        if (!this._volumes.has(dayInterval)) {
+        const poolVolume = this._volumes.find(p => p.interval === dayInterval);
+        if (poolVolume === undefined) {
             return 0;
         }
-        return this.feeTier * (this._volumes.get(dayInterval) ?? 0) / this.tvl;
+        return Pool.ScoreDollarsMultiplier * (this.feeTier * poolVolume.volume / this.tvl) / dayInterval;
     }
 
     public get blockChain(): Blockchain {
         return this._blockchain;
-    }
-
-    public clearVolume(): void {
-        this._volumes. clear();
     }
 }

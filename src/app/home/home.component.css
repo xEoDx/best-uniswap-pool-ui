@@ -8,6 +8,7 @@ footer {
 
 .div-donate{
     padding-top: 15px;
+    padding-right: 15px;
 }
 
 .title{
@@ -20,4 +21,8 @@ footer {
 
 .btn-donation:hover {
     background-color: #ffc5c5;
+}
+
+.main {
+    padding-top: 25px;
 }

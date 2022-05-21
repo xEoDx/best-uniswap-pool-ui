@@ -32,7 +32,7 @@
                        (keyup)="onSearchChanged($event)" [(ngModel)]="nameFilter" ng-trim="true"/>
             </div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-12">
             <label class="col-sm-2 col-form-label">Days (Interval)</label>
             <div class="form-check" *ngFor="let interval of daysInterval">
                 <input class="form-check-input" [checked]="selectedIntervals.indexOf(interval) > -1"
@@ -53,32 +53,23 @@
                 <th mat-sort-header="pool"><strong>Pool</strong></th>
                 <th mat-sort-header="fee"><strong>Fee tier</strong></th>
 
-                <th mat-sort-header="tvl"><strong>TVL</strong></th>
-                <th *ngFor="let interval of selectedIntervals">
-                    <div mat-sort-header="volume-{{interval}}"><strong>Volume
-                        ({{interval}} {{interval === 1 ? 'day' : 'days'}})</strong></div>
-                    <div mat-sort-header="score-{{interval}}"><strong>Score
-                        ({{interval}} {{interval === 1 ? 'day' : 'days'}})</strong></div>
+                <th *ngFor="let interval of selectedIntervals" >
+                    <strong>{{interval}} {{interval === 1 ? 'day' : 'days'}}</strong>
+                    <div mat-sort-header="score-{{interval}}" placement="top" ngbTooltip="Average daily earnings of the last {{interval}} {{interval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Daily earnings</strong></div>
                 </th>
-                <!--                <th mat-sort-header="volume"><strong>Volume (10D)</strong></th>-->
-                <!--                <th mat-sort-header="score" placement="top"-->
-                <!--                    ngbTooltip="Average revenue obtained for every dollar provided on the liquidity pool for the last 10 days.">-->
-                <!--                    <strong>Avg. gain / dollar provided (10D)</strong></th>-->
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let pool of sortedData">
+            <tr *ngFor="let pool of sortedData" class="pool-row">
                 <th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
                 <th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
-                <th><p>{{parseDollars(pool.tvl)}}</p></th>
-                <div *ngFor="let interval of selectedIntervals">
-
-                    <th *ngIf="pool.volumes !== undefined && pool.volumes instanceof Map">
-                        {{log(pool.volumes.get(1))}}
-                        <div><p>{{parseDollars(pool.volumes.get(interval))}}</p></div>
+        
+                <th *ngFor="let interval of selectedIntervals">
+                    <div *ngIf="pool.volumes !== undefined">                
+                        <!-- <div><p>{{parseDollars(getPoolVolume(pool, interval))}}</p></div> -->
                         <div><p>{{pool.score(interval).toFixed(6)}}$</p></div>
-                    </th>
-                </div>
+                    </div>
+                </th>
             </tr>
             </tbody>
         </table>

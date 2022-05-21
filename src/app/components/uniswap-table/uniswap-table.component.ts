@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Pool } from '../../models/pool';
 import { RiskFilter } from '../../models/risk-filter';
 import { Blockchain } from '../../models/blockchain';
+import { PoolVolumeInterval } from '../../models/pool-volume-interval';
 import { UniswapDataFetcherService } from '../../services/uniswap-data-fetcher.service';
 import { environment } from '../../../environments/environment';
 import { Gtag } from 'angular-gtag';
@@ -42,6 +43,16 @@ export class UniswapTableComponent implements OnInit {
             this.applyFilters();
         });
     }
+    public getPoolVolume(pool: Pool, interval: number): number{
+        if (pool === undefined || pool.volumes === undefined) {
+            return 0;
+        }
+        const poolVolume = pool.volumes.find(v => v.interval === interval);
+        if(poolVolume === undefined){
+            return 0;
+        }
+        return poolVolume.volume;
+    }
 
     public parseDollars(amount: number | undefined): string {
         if (amount === undefined) {
@@ -80,21 +91,27 @@ export class UniswapTableComponent implements OnInit {
         }
 
         this.sortedData = data.sort((a, b) => {
-            const isAsc = sort.direction === 'asc';
-            switch (sort.active) {
-                case 'pool':
-                    return this.compare(a.token0.name, b.token0.name, isAsc);
-                case 'fee':
-                    return this.compare(a.feeTier, b.feeTier, isAsc);
-                case 'tvl':
-                    return this.compare(a.tvl, b.tvl, isAsc);
-                // case 'volume':
-                //   return this.compare(a.volume, b.volume, isAsc);
-                // case 'score':
-                //   return this.compare(a.score, b.score, isAsc);
-                default:
-                    return 0;
+            const isAsc = sort.direction === 'asc';  
+            
+            if(sort.active.includes("score")){
+                const selectedIntervalDay: number = +sort.active.split('-')[1];
+                
+                const Avol: number = a.volumes.find(v => v.interval === selectedIntervalDay)?.volume ?? 0;
+                const Bvol: number = b.volumes.find(v => v.interval === selectedIntervalDay)?.volume ?? 0; 
+                return this.compare(Avol, Bvol, isAsc);
             }
+            else{
+                switch (sort.active) {
+                    case 'pool':
+                        return this.compare(a.token0.name, b.token0.name, isAsc);
+                    case 'fee':
+                        return this.compare(a.feeTier, b.feeTier, isAsc);
+                    case 'tvl':
+                        return this.compare(a.tvl, b.tvl, isAsc);
+                    default:
+                        return 0;
+                }    
+            }            
         });
     }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Pool } from '../models/pool';
-
+import { PoolVolumeInterval } from "../models/pool-volume-interval";
 import { Token } from '../models/token';
 import { Blockchain } from '../models/blockchain';
 import { environment } from '../../environments/environment';
@@ -57,24 +57,17 @@ export class UniswapDataFetcherService {
       return;
     }
 
+    const poolVolumes: Array<PoolVolumeInterval> = p._volumes;
 
-    console.log(p._volumes instanceof Array);
-    
-  console.log("1", p._volumes[0] instanceof Object);
-    const volumes: Map<number, number> = new Map<number,number>(p._volumes);
-  console.log(volumes);
-    if(volumes === undefined || volumes.size <= 0){
-      return;
-    }
     let token0: Token = new Token(p._token0._name);
     let token1: Token = new Token(p._token1._name);
 
-    let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, volumes, token0, token1);
+    let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, poolVolumes, token0, token1);
     this._pools.push(pool);
   }
 
   private getDummyData(): any{
     console.log("DUMMY DATA!");
-    return {"pools":[{"_id":"0x8c54aa2a32a779e6f6fbea568ad85a19e0109c26","_blockchain":"Ethereum","_feeTier":"500","_tvl":6713300,"_token0":{"_name":"WETH"},"_token1":{"_name":"USDC"},"_volume":3103015.258621318},{"_id":"0x4c54ff7f1c424ff5487a32aad0b48b19cbaf087f","_blockchain":"Ethereum","_feeTier":"3000","_tvl":7608132,"_token0":{"_name":"NEXO"},"_token1":{"_name":"WETH"},"_volumes":[{"1":20000},{"3":30000},{"7":50000},{"14":100000},{"20":140000}]},{"_id":"0x92560c178ce069cc014138ed3c2f5221ba71f58a","_blockchain":"Ethereum","_feeTier":"3000","_tvl":9148665,"_token0":{"_name":"WETH"},"_token1":{"_name":"ENS"},"_volume":645306.034105053},{"_id":"0xac4b3dacb91461209ae9d41ec517c2b9cb1b7daf","_blockchain":"Ethereum","_feeTier":"3000","_tvl":45620558,"_token0":{"_name":"APE"},"_token1":{"_name":"WETH"},"_volumes":[{"1":30000},{"3":40000},{"7":80000},{"14":120000},{"20":160000}]}]};
+    return {"pools":[{"_id":"0x8c54aa2a32a779e6f6fbea568ad85a19e0109c26","_blockchain":"Ethereum","_feeTier":"500","_tvl":6713300,"_token0":{"_name":"WETH"},"_token1":{"_name":"USDC"},"_volume":3103015.258621318},{"_id":"0x4c54ff7f1c424ff5487a32aad0b48b19cbaf087f","_blockchain":"Ethereum","_feeTier":"3000","_tvl":7608132,"_token0":{"_name":"NEXO"},"_token1":{"_name":"WETH"},"_volumes":[{"interval":1,"volume":20000},{"interval":3,"volume":30000},{"interval":7,"volume":50000},{"interval":14,"volume":1000000},{"interval":20,"volume":200000}]},{"_id":"0x92560c178ce069cc014138ed3c2f5221ba71f58a","_blockchain":"Ethereum","_feeTier":"3000","_tvl":9148665,"_token0":{"_name":"WETH"},"_token1":{"_name":"ENS"},"_volume":645306.034105053},{"_id":"0xac4b3dacb91461209ae9d41ec517c2b9cb1b7daf","_blockchain":"Ethereum","_feeTier":"3000","_tvl":45620558,"_token0":{"_name":"APE"},"_token1":{"_name":"WETH"},"_volumes":[{"interval":1,"volume":10000},{"interval":3,"volume":20000},{"interval":7,"volume":60000},{"interval":14,"volume":700000},{"interval":20,"volume":2100000}]}]};
   }
 }
