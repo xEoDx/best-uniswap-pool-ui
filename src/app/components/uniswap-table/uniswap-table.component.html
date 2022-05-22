@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col">
 
             <label for="blockchainSelector" class="col-sm-2 col-form-label">Blockchain</label>
             <div class="col-sm-6">
@@ -15,7 +15,7 @@
                 </ng-select>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col">
             <label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
             <div class="col-sm-6">
 
@@ -25,22 +25,30 @@
                 </ng-select>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col">
             <label for="poolSearch" class="col-sm-2 col-form-label">Search</label>
             <div class="col-sm-6">
                 <input class="form-control" placeholder="WETH USD" type="text" name="poolSearch" id="poolSearch"
                        (keyup)="onSearchChanged($event)" [(ngModel)]="nameFilter" ng-trim="true"/>
             </div>
         </div>
-        <div class="col-12">
-            <label class="col-sm-2 col-form-label">Days (Interval)</label>
-            <div class="form-check" *ngFor="let interval of daysInterval">
+    </div>
+
+    <div class="row">
+        <div class="d-flex justify-content-center days-interval-filter">
+            <label class="col col-form-label">Days (Interval)</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="col-1 form-check form-check-inline" *ngFor="let interval of daysInterval">
                 <input class="form-check-input" [checked]="selectedIntervals.indexOf(interval) > -1"
                        [value]="interval" (change)="changeDayInterval($event)" type="checkbox" id="{{interval}}"/>
                 <label class="form-check-label">{{interval}} {{interval === 1 ? 'day' : 'days'}}</label>
             </div>
         </div>
     </div>
+    
 </div>
 <br>
 
@@ -52,10 +60,8 @@
             <tr>
                 <th mat-sort-header="pool"><strong>Pool</strong></th>
                 <th mat-sort-header="fee"><strong>Fee tier</strong></th>
-
                 <th *ngFor="let interval of selectedIntervals" >
-                    <strong>{{interval}} {{interval === 1 ? 'day' : 'days'}}</strong>
-                    <div mat-sort-header="score-{{interval}}" placement="top" ngbTooltip="Average daily earnings of the last {{interval}} {{interval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Daily earnings</strong></div>
+                    <div mat-sort-header="score-{{interval}}" placement="top" ngbTooltip="Average daily earnings of the last {{interval}} {{interval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Avg. earnings ({{interval}} {{interval === 1 ? 'day' : 'days'}})</strong><span class="bi bi-info-circle"></span></div>
                 </th>
             </tr>
             </thead>
@@ -67,7 +73,8 @@
                 <th *ngFor="let interval of selectedIntervals">
                     <div *ngIf="pool.volumes !== undefined">                
                         <!-- <div><p>{{parseDollars(getPoolVolume(pool, interval))}}</p></div> -->
-                        <div><p>{{pool.score(interval).toFixed(6)}}$</p></div>
+                        <!-- <div><p>{{pool.score(interval).toFixed(6)}}$</p></div> -->
+                        <div><p>${{getPoolScore(pool, interval)}}</p></div>
                     </div>
                 </th>
             </tr>

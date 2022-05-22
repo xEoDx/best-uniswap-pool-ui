@@ -43,6 +43,15 @@ export class UniswapTableComponent implements OnInit {
             this.applyFilters();
         });
     }
+
+    public getPoolScore(pool: Pool, interval: number): string{
+        if(pool === undefined || pool.volumes === undefined){
+            return '0';
+        }
+
+        const poolScore: number = pool.score(interval);
+        return poolScore.toFixed(6);
+    }
     public getPoolVolume(pool: Pool, interval: number): number{
         if (pool === undefined || pool.volumes === undefined) {
             return 0;
@@ -92,7 +101,7 @@ export class UniswapTableComponent implements OnInit {
 
         this.sortedData = data.sort((a, b) => {
             const isAsc = sort.direction === 'asc';  
-            
+
             if(sort.active.includes("score")){
                 const selectedIntervalDay: number = +sort.active.split('-')[1];
                 

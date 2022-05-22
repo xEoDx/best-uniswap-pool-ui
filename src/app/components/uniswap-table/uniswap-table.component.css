@@ -43,3 +43,7 @@ p{
 .pool-row {
     cursor: pointer;
 }
+
+.days-interval-filter{
+    padding-top: 20px;
+}
