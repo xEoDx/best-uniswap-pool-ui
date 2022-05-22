@@ -22,6 +22,10 @@ export class Pool {
         this._volumes = volumes;
     }
 
+    public get id(): string{
+        return this._id;
+    }
+
     public get feeTier(): number {
         return this._feeTier / 10000;
     }

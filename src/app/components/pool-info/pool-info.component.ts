@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Pool } from '../../models/pool';
+import { Blockchain } from '../../models/blockchain';
 import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Inject } from '@angular/core';  
 
@@ -13,12 +14,17 @@ export class PoolInfoComponent implements OnInit {
 
   daysInterval: Array<number> = [1, 3, 7, 14, 20]; // TODO
   poolInfoTitle: string = "";
+  uniswapPoolUrl: string = "";
   pool: Pool;
 
   constructor( @Inject(MAT_DIALOG_DATA) public data: Pool) {
     console.log("Opened detailed info for pool: ", data);
-    this.poolInfoTitle = data.token0.name + " - " + data.token1.name;
     this.pool = data;
+    this.poolInfoTitle = data.token0.name + " - " + data.token1.name;
+    const poolId: string = this.pool.id;
+    const blockchain: string = Blockchain[this.pool.blockChain];
+    this.uniswapPoolUrl = `https://info.uniswap.org/#/${blockchain}/pools/${poolId}`;
+    
   }
 
   ngOnInit(): void {
