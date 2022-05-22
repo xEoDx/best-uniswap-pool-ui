@@ -17,13 +17,15 @@ import { UniswapDataFetcherService } from './services/uniswap-data-fetcher.servi
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DonationDialogComponent } from './components/donation-dialog/donation-dialog.component';
+import { PoolInfoComponent } from './components/pool-info/pool-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     UniswapTableComponent,
-    DonationDialogComponent
+    DonationDialogComponent,
+    PoolInfoComponent
   ],
   imports: [
     BrowserModule,

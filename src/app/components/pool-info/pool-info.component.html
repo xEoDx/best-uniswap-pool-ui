@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Detailed information for Pool {{poolInfoTitle}}</h2>
+<mat-dialog-content class="mat-typography">
+	<div class="row">
+		<h3><b>TVL</b></h3>
+		<p>{{parseDollars(pool.tvl)}}</p>
+	</div>
+
+	<div class="row" *ngFor="let interval of daysInterval" >
+		<h3><b>Volume ({{interval}} {{interval === 1 ? 'day' : 'days'}})</b></h3>
+		<p>${{getPoolVolume(pool, interval)}}</p>
+	</div>  
+  
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+</mat-dialog-actions>

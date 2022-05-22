@@ -6,6 +6,9 @@ import { PoolVolumeInterval } from '../../models/pool-volume-interval';
 import { UniswapDataFetcherService } from '../../services/uniswap-data-fetcher.service';
 import { environment } from '../../../environments/environment';
 import { Gtag } from 'angular-gtag';
+import {MatDialog} from '@angular/material/dialog';
+import {PoolInfoComponent} from '../pool-info/pool-info.component'
+
 
 @Component({
     selector: 'app-uniswap-table',
@@ -31,7 +34,7 @@ export class UniswapTableComponent implements OnInit {
     selectedRisk: number = 0;
     risks = [{id: 0, name: 'Low'}, {id: 1, name: 'Moderate'}, {id: 2, name: 'High'}];
 
-    constructor(private uniswapService: UniswapDataFetcherService, public gtag: Gtag) {
+    constructor(private uniswapService: UniswapDataFetcherService, public gtag: Gtag, public dialog: MatDialog) {
         this.allPools = new Array<Pool>();
         this.sortedData = new Array<Pool>();
     }
@@ -52,16 +55,7 @@ export class UniswapTableComponent implements OnInit {
         const poolScore: number = pool.score(interval);
         return poolScore.toFixed(6);
     }
-    public getPoolVolume(pool: Pool, interval: number): number{
-        if (pool === undefined || pool.volumes === undefined) {
-            return 0;
-        }
-        const poolVolume = pool.volumes.find(v => v.interval === interval);
-        if(poolVolume === undefined){
-            return 0;
-        }
-        return poolVolume.volume;
-    }
+    
 
     public parseDollars(amount: number | undefined): string {
         if (amount === undefined) {
@@ -261,7 +255,17 @@ export class UniswapTableComponent implements OnInit {
         this.selectedIntervals.sort((a, b) => (a < b ? -1 : 1));
     }
 
-    log(volumes: any) {
-        console.log(volumes);
+    openPoolDetailedView(pool: Pool) {
+        const dialogRef = this.dialog.open(PoolInfoComponent, {
+               width      : '100%',
+               maxWidth   : '720px',
+               height     : 'auto',
+               hasBackdrop: true,
+               maxHeight  : '700px',
+               data       : pool,});
+
+        dialogRef.afterClosed().subscribe(result => {
+            
+        });
     }
 }

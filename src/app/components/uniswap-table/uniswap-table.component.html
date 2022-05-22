@@ -66,7 +66,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let pool of sortedData" class="pool-row">
+            <tr *ngFor="let pool of sortedData" class="pool-row" (click)="openPoolDetailedView(pool)">
                 <th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
                 <th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
         
