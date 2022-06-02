@@ -8,7 +8,6 @@ import { Gtag } from 'angular-gtag';
 import { MatDialog } from '@angular/material/dialog';
 import { PoolInfoComponent } from '../pool-info/pool-info.component'
 
-
 @Component({
     selector: 'app-uniswap-table',
     templateUrl: './uniswap-table.component.html',
@@ -45,14 +44,6 @@ export class UniswapTableComponent implements OnInit {
         });
     }
 
-    public getPoolScore(pool: Pool): string{
-        if(pool === undefined || pool.volumes === undefined){
-            return '0';
-        }
-
-        const poolScore: number = pool.score(this.selectedInterval);
-        return poolScore.toFixed(6);
-    }
 
     formatLabel(value: number) {
         return value + ' d';
@@ -88,7 +79,6 @@ export class UniswapTableComponent implements OnInit {
     }
 
     sortData(sort: any) {
-
         const data = this.sortedData.slice();
         if (!sort.active || sort.direction === '') {
             this.sortedData = data;
@@ -125,6 +115,7 @@ export class UniswapTableComponent implements OnInit {
     onBlockchainChanged($event: any) {
         this.applyFilters();
         const blockChainTrackingData: string = 'blockchain-' + this.selectedBlockchain;
+        console.log("Blockchain changed: ",$event, " blockchain is: ", this.selectedBlockchain);
         this.gtag.event('filter_pools', {
             method: 'blockchain',
             specific: blockChainTrackingData
@@ -141,12 +132,13 @@ export class UniswapTableComponent implements OnInit {
         this.sortedData = [];
 
         let risk: RiskFilter = this.selectedRisk as RiskFilter;
-
         this.allPools.forEach(pool => {
             if (this.isFromBlockchain(pool, this.selectedBlockchain) && this.isWithinRisk(pool, risk) && this.poolHasTokensName(pool, this.nameFilter)) {
                 this.sortedData.push(pool);
             }
         });
+
+        this.sortData({active: 'score', direction: 'desc'});
 
     }
 
@@ -262,16 +254,37 @@ export class UniswapTableComponent implements OnInit {
         });
     }
 
-    getPoolTvl(pool: Pool): string {
-        if(pool.volumes === undefined || pool.volumes.length <= this.selectedInterval){
+    public getPoolScore(pool: Pool): string{
+        if(!this.poolHasIntervalData(pool)){
+            return '0';
+        }
+
+        const poolScore: number = pool.score(this.selectedInterval);
+        if(poolScore > 0){
+            return '$'+poolScore.toFixed(6);
+        }
+        else {
             return "-";
         }
-        return this.parseDollars(pool.volumes[this.selectedInterval].tvl);
+    }
+
+    getPoolTvl(pool: Pool): string {
+        if(!this.poolHasIntervalData(pool)){
+            return "-";
+        }
+        return this.parseDollars(pool.avgTvl(this.selectedInterval));
     }
     getPoolVolume(pool: Pool): string {
-        if(pool.volumes === undefined || pool.volumes.length <= this.selectedInterval){
+        if(!this.poolHasIntervalData(pool)){
             return "-";
         }
-        return this.parseDollars(pool.volumes[this.selectedInterval].volume);
+        return this.parseDollars(pool.aggregatedVolume(this.selectedInterval));
+    }
+    poolHasIntervalData(pool: Pool): boolean {
+        return pool.volumes !== undefined &&
+            pool.volumes.length >= this.selectedInterval &&
+            pool.volumes[this.selectedInterval] !== undefined &&
+            pool.volumes[this.selectedInterval].tvl !== undefined &&
+            pool.volumes[this.selectedInterval].volume !== undefined;
     }
 }

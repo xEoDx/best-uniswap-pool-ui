@@ -1,11 +1,11 @@
 <div class="container">
-    <div class="row">
-        <div class="col">
 
+    <div class="row second-row-filters">
+        <div class="col">
             <label for="blockchainSelector" class="col-sm-2 col-form-label">Blockchain</label>
             <div class="col-sm-6">
-                <ng-select name="blockchainSelector" (close)="onBlockchainChanged($event)"
-                           [(ngModel)]="selectedBlockchain" [clearable]="false">
+                <ng-select name="blockchainSelector" (close)="onBlockchainChanged($event)" [clearable]="false"
+                           [(ngModel)]="selectedBlockchain" >
                     <ng-option *ngFor="let blockchain of blockchains" [value]="blockchain.id">
                         <img src="assets/{{blockchain.icon}}" width="18" height="18"/>
 
@@ -13,16 +13,7 @@
                         <label class="blockchain-select-label">{{blockchain.name}}</label>
                     </ng-option>
                 </ng-select>
-            </div>
-        </div>
-        <div class="col">
-            <label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
-            <div class="col-sm-6">
 
-                <ng-select name="riskSelector" [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)"
-                           [clearable]="false">
-                    <ng-option *ngFor="let risk of risks" [value]="risk.id">{{risk.name}}</ng-option>
-                </ng-select>
             </div>
         </div>
         <div class="col">
@@ -32,27 +23,38 @@
                        (keyup)="onSearchChanged($event)" [(ngModel)]="nameFilter" ng-trim="true"/>
             </div>
         </div>
+
+        <div class="col">
+            <label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
+            <div class="col-sm-6">
+
+                <ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)" [clearable]="false">
+                    <ng-option *ngFor="let risk of risks" [value]="risk.id">{{risk.name}}</ng-option>
+                </ng-select>
+            </div>
+        </div>
     </div>
 
     <div class="row">
         <div class="d-flex justify-content-center days-interval-filter">
-            <label class="col col-form-label">Days (Interval)</label>
+            <h3>Days (Interval)</h3>
+        </div>
+        <div class="d-flex justify-content-center">
+            <mat-slider
+                    [thumbLabel]=true
+                    [displayWith]="formatLabel"
+                    [(ngModel)]="selectedInterval"
+
+                    step="1"
+                    min="1"
+                    max="30"
+                    aria-label="units"></mat-slider>
         </div>
     </div>
-    <div class="row">
-        <mat-slider
-                thumbLabel
-                [displayWith]="formatLabel"
-                [(ngModel)]="selectedInterval"
-                tickInterval="1"
-                step="1"
-                min="1"
-                max="30"
-                aria-label="units"></mat-slider>
-    </div>
-    
-</div>
-<br>
+
+
+    <br>
+
 
 <div class="container border border-0 rounded uniswap-table">
     <h2>Pools</h2>
@@ -62,30 +64,29 @@
             <tr>
                 <th mat-sort-header="pool"><strong>Pool</strong></th>
                 <th mat-sort-header="fee"><strong>Fee tier</strong></th>
-                <th mat-sort-header="tvl"><strong>TVL</strong></th>
-                <th mat-sort-header="volume"><strong>Volume</strong></th>
-                <th mat-sort-header="score">
-                    <div mat-sort-header="score-{{selectedInterval}}" placement="top" ngbTooltip="Average daily earnings of the last {{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Avg. daily earnings ({{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}})</strong><span class="bi bi-info-circle"></span></div>
+                <th mat-sort-header="tvl"><strong>Average TVL</strong></th>
+                <th mat-sort-header="volume"><strong>Aggregated Volume</strong></th>
+                <th mat-sort-header="score" placement="top" ngbTooltip="Average daily earnings of the last {{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool.">
+                    <strong>Average daily earnings ({{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}}) per $100</strong><span class="bi bi-info-circle"></span>
                 </th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let pool of sortedData" class="pool-row" (click)="openPoolDetailedView(pool)">
-                <th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
-                <th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
-        
-                <th>
-                    <div *ngIf="pool.volumes !== undefined">
+            <tr *ngFor="let pool of sortedData" class="pool-row" > <!-- (click)="openPoolDetailedView(pool)" -->
+                <th *ngIf="poolHasIntervalData(pool)">
+                    <p>{{pool.token0.name}} - {{pool.token1.name}}</p>
+                </th>
+                <th *ngIf="poolHasIntervalData(pool)">
+                    <span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span>
+                </th>
+                <th *ngIf="poolHasIntervalData(pool)">
                         <div><p>{{getPoolTvl(pool)}}</p></div>
-                    </div>
-                </th><th>
-                    <div *ngIf="pool.volumes !== undefined">
+                </th>
+                <th *ngIf="poolHasIntervalData(pool)">
                         <div><p>{{getPoolVolume(pool)}}</p></div>
-                    </div>
-                </th><th>
-                    <div *ngIf="pool.volumes !== undefined">
-                        <div><p>${{getPoolScore(pool)}}</p></div>
-                    </div>
+                </th>
+                <th *ngIf="poolHasIntervalData(pool)">
+                        <div><p>{{getPoolScore(pool)}}</p></div>
                 </th>
             </tr>
             </tbody>

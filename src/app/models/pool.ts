@@ -1,7 +1,6 @@
 import { Blockchain } from "./blockchain";
 import { Token } from "./token";
 import { PoolVolumeInterval } from "./pool-volume-interval";
-import { PoolDayData } from './pool-day-data';
 
 export class Pool {
     private static ScoreDollarsMultiplier = 100; 
@@ -70,8 +69,36 @@ export class Pool {
                 aggregatedTvl += dayData.tvl;
             }
         }
+        if(aggregatedTvl === 0 || aggregatedVolume === 0){
+            return 0;
+        }
+
         const avgTvl = aggregatedTvl / dayInterval;
         return Pool.ScoreDollarsMultiplier * ((this.feeTier / 100) * (aggregatedVolume / avgTvl)) / dayInterval;
+    }
+
+    public aggregatedVolume(dayInterval: number): number{
+        let aggregatedVolume = 0;
+
+        for(let i = 0; i <= dayInterval; i++){
+            const dayData = this.getDayData(i);
+            if(dayData !== undefined) {
+                aggregatedVolume += dayData.volume;
+            }
+        }
+        return aggregatedVolume;
+    }
+
+    public avgTvl(dayInterval: number): number{
+        let aggregatedTvl = 0;
+
+        for(let i = 0; i <= dayInterval; i++){
+            const dayData = this.getDayData(i);
+            if(dayData !== undefined) {
+                aggregatedTvl += dayData.tvl;
+            }
+        }
+        return aggregatedTvl / dayInterval;
     }
 
     public get blockChain(): Blockchain {
