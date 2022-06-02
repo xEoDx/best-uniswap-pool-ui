@@ -47,3 +47,7 @@ p{
 .days-interval-filter{
     padding-top: 20px;
 }
+
+mat-slider {
+    width: 300px;
+}

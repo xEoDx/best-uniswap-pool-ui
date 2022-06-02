@@ -40,13 +40,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            <div class="col-1 form-check form-check-inline" *ngFor="let interval of daysInterval">
-                <input class="form-check-input" [checked]="selectedIntervals.indexOf(interval) > -1"
-                       [value]="interval" (change)="changeDayInterval($event)" type="checkbox" id="{{interval}}"/>
-                <label class="form-check-label">{{interval}} {{interval === 1 ? 'day' : 'days'}}</label>
-            </div>
-        </div>
+        <mat-slider
+                thumbLabel
+                [displayWith]="formatLabel"
+                [(ngModel)]="selectedInterval"
+                tickInterval="1"
+                step="1"
+                min="1"
+                max="30"
+                aria-label="units"></mat-slider>
     </div>
     
 </div>
@@ -60,8 +62,10 @@
             <tr>
                 <th mat-sort-header="pool"><strong>Pool</strong></th>
                 <th mat-sort-header="fee"><strong>Fee tier</strong></th>
-                <th *ngFor="let interval of selectedIntervals" >
-                    <div mat-sort-header="score-{{interval}}" placement="top" ngbTooltip="Average daily earnings of the last {{interval}} {{interval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Avg. earnings ({{interval}} {{interval === 1 ? 'day' : 'days'}})</strong><span class="bi bi-info-circle"></span></div>
+                <th mat-sort-header="tvl"><strong>TVL</strong></th>
+                <th mat-sort-header="volume"><strong>Volume</strong></th>
+                <th mat-sort-header="score">
+                    <div mat-sort-header="score-{{selectedInterval}}" placement="top" ngbTooltip="Average daily earnings of the last {{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}} obtained for every 100 dollars provided on the liquidity pool."><strong>Avg. daily earnings ({{selectedInterval}} {{selectedInterval === 1 ? 'day' : 'days'}})</strong><span class="bi bi-info-circle"></span></div>
                 </th>
             </tr>
             </thead>
@@ -70,11 +74,17 @@
                 <th><p>{{pool.token0.name}} - {{pool.token1.name}}</p></th>
                 <th><span class="badge badge-pill badge-secondary">{{pool.feeTier}}%</span></th>
         
-                <th *ngFor="let interval of selectedIntervals">
-                    <div *ngIf="pool.volumes !== undefined">                
-                        <!-- <div><p>{{parseDollars(getPoolVolume(pool, interval))}}</p></div> -->
-                        <!-- <div><p>{{pool.score(interval).toFixed(6)}}$</p></div> -->
-                        <div><p>${{getPoolScore(pool, interval)}}</p></div>
+                <th>
+                    <div *ngIf="pool.volumes !== undefined">
+                        <div><p>{{getPoolTvl(pool)}}</p></div>
+                    </div>
+                </th><th>
+                    <div *ngIf="pool.volumes !== undefined">
+                        <div><p>{{getPoolVolume(pool)}}</p></div>
+                    </div>
+                </th><th>
+                    <div *ngIf="pool.volumes !== undefined">
+                        <div><p>${{getPoolScore(pool)}}</p></div>
                     </div>
                 </th>
             </tr>

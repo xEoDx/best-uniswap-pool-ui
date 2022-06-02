@@ -13,11 +13,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { UniswapTableComponent } from './components/uniswap-table/uniswap-table.component';
-import { UniswapDataFetcherService } from './services/uniswap-data-fetcher.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DonationDialogComponent } from './components/donation-dialog/donation-dialog.component';
 import { PoolInfoComponent } from './components/pool-info/pool-info.component';
+import {MatSliderModule} from '@angular/material/slider';
+
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { PoolInfoComponent } from './components/pool-info/pool-info.component';
     MatDialogModule,
     NgSelectModule,
     FormsModule,
+    MatSliderModule,
     GtagModule.forRoot({ trackingId: 'G-LTLKGZLW9W', trackPageviews: true })
 
   ],

@@ -53,20 +53,21 @@ export class UniswapDataFetcherService {
 
   private addPool(p:any): void{
 
-    if(p._volumes === undefined){
+    if(p === null || p?.dayDataStr === undefined){
       return;
     }
 
     const poolVolumes: Array<PoolVolumeInterval> = new Array<PoolVolumeInterval>();
-    var parsedVolumes: Array<{ _interval: number, _volume: number }> = (p._volumes);
+    const parsedVolumes: Array<{tvl:number, volume: number, interval: number }> = (p.dayDataStr);
     parsedVolumes.forEach(v => {
-      poolVolumes.push(new PoolVolumeInterval(v._volume, v._interval));
-    });  
+      let poolIntervalData = new PoolVolumeInterval(+v.volume, +v.tvl, v.interval);
+      poolVolumes.push(poolIntervalData);
+    });
 
     let token0: Token = new Token(p._token0._name);
     let token1: Token = new Token(p._token1._name);
 
-    let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, p._tvl, poolVolumes, token0, token1);
+    let pool: Pool = new Pool(p._id, p._blockchain, p._feeTier, poolVolumes, token0, token1);
     this._pools.push(pool);
   }
 

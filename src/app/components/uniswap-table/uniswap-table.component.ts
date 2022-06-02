@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Pool } from '../../models/pool';
 import { RiskFilter } from '../../models/risk-filter';
 import { Blockchain } from '../../models/blockchain';
-import { PoolVolumeInterval } from '../../models/pool-volume-interval';
 import { UniswapDataFetcherService } from '../../services/uniswap-data-fetcher.service';
 import { environment } from '../../../environments/environment';
 import { Gtag } from 'angular-gtag';
-import {MatDialog} from '@angular/material/dialog';
-import {PoolInfoComponent} from '../pool-info/pool-info.component'
+import { MatDialog } from '@angular/material/dialog';
+import { PoolInfoComponent } from '../pool-info/pool-info.component'
 
 
 @Component({
@@ -18,9 +17,7 @@ import {PoolInfoComponent} from '../pool-info/pool-info.component'
 export class UniswapTableComponent implements OnInit {
     allPools: Array<Pool>;
     sortedData: Array<Pool>;
-
-    daysInterval: Array<number> = [1, 3, 7, 14, 20]; // TODO
-    selectedIntervals: Array<number> = [1, 7, 20];
+    selectedInterval: number;
 
     nameFilter: string = '';
 
@@ -37,6 +34,7 @@ export class UniswapTableComponent implements OnInit {
     constructor(private uniswapService: UniswapDataFetcherService, public gtag: Gtag, public dialog: MatDialog) {
         this.allPools = new Array<Pool>();
         this.sortedData = new Array<Pool>();
+        this.selectedInterval = 1;
     }
 
     ngOnInit(): void {
@@ -47,13 +45,17 @@ export class UniswapTableComponent implements OnInit {
         });
     }
 
-    public getPoolScore(pool: Pool, interval: number): string{
+    public getPoolScore(pool: Pool): string{
         if(pool === undefined || pool.volumes === undefined){
             return '0';
         }
 
-        const poolScore: number = pool.score(interval);
+        const poolScore: number = pool.score(this.selectedInterval);
         return poolScore.toFixed(6);
+    }
+
+    formatLabel(value: number) {
+        return value + ' d';
     }
     
 
@@ -94,26 +96,28 @@ export class UniswapTableComponent implements OnInit {
         }
 
         this.sortedData = data.sort((a, b) => {
-            const isAsc = sort.direction === 'asc';  
+            const isAsc = sort.direction === 'asc';
 
-            if(sort.active.includes("score")){
-                const selectedIntervalDay: number = +sort.active.split('-')[1];
-                
-                const Avol: number = a.volumes.find(v => v.interval === selectedIntervalDay)?.volume ?? 0;
-                const Bvol: number = b.volumes.find(v => v.interval === selectedIntervalDay)?.volume ?? 0; 
+            if (sort.active.includes('score')) {
+                return this.compare(a.score(this.selectedInterval), b.score(this.selectedInterval), isAsc);
+            } else if (sort.active.includes('tvl')) {
+                const Atvl: number = a.volumes.find(v => v.interval === this.selectedInterval)?.tvl ?? 0;
+                const Btvl: number = b.volumes.find(v => v.interval === this.selectedInterval)?.tvl ?? 0;
+                return this.compare(Atvl, Btvl, isAsc);
+
+            } else if (sort.active.includes('volume')) {
+                const Avol: number = a.volumes.find(v => v.interval === this.selectedInterval)?.volume ?? 0;
+                const Bvol: number = b.volumes.find(v => v.interval === this.selectedInterval)?.volume ?? 0;
                 return this.compare(Avol, Bvol, isAsc);
-            }
-            else{
+            } else {
                 switch (sort.active) {
                     case 'pool':
                         return this.compare(a.token0.name, b.token0.name, isAsc);
                     case 'fee':
                         return this.compare(a.feeTier, b.feeTier, isAsc);
-                    case 'tvl':
-                        return this.compare(a.tvl, b.tvl, isAsc);
                     default:
                         return 0;
-                }    
+                }
             }            
         });
     }
@@ -244,17 +248,6 @@ export class UniswapTableComponent implements OnInit {
         return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
 
-    changeDayInterval(event: any) {
-        const targetVal = +event.target.value;
-        const indexValue = this.selectedIntervals.indexOf(targetVal);
-        if (indexValue > -1) {
-            this.selectedIntervals.splice(indexValue, 1);
-        } else {
-            this.selectedIntervals.push(targetVal);
-        }
-        this.selectedIntervals.sort((a, b) => (a < b ? -1 : 1));
-    }
-
     openPoolDetailedView(pool: Pool) {
         const dialogRef = this.dialog.open(PoolInfoComponent, {
                width      : '100%',
@@ -267,5 +260,18 @@ export class UniswapTableComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             
         });
+    }
+
+    getPoolTvl(pool: Pool): string {
+        if(pool.volumes === undefined || pool.volumes.length <= this.selectedInterval){
+            return "-";
+        }
+        return this.parseDollars(pool.volumes[this.selectedInterval].tvl);
+    }
+    getPoolVolume(pool: Pool): string {
+        if(pool.volumes === undefined || pool.volumes.length <= this.selectedInterval){
+            return "-";
+        }
+        return this.parseDollars(pool.volumes[this.selectedInterval].volume);
     }
 }

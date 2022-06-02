@@ -68,4 +68,14 @@ export class PoolInfoComponent implements OnInit {
         }
     }
 
+    getPoolTvl(pool: Pool, interval: number): string {
+        if (pool === undefined || pool.volumes === undefined) {
+            return "0";
+        }
+        const poolVolume = pool.volumes.find(v => v.interval === interval);
+        if(poolVolume === undefined){
+            return "0";
+        }
+        return this.parseDollars(poolVolume.tvl);
+    }
 }

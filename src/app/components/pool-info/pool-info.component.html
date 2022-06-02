@@ -3,14 +3,12 @@
 	<div class="row">
 		<a href="{{uniswapPoolUrl}}" target="_blank">{{poolInfoTitle}}</a>		
 	</div>
-	<div class="row">
-		<h3><b>TVL</b></h3>
-		<p>{{parseDollars(pool.tvl)}}</p>
-	</div>
 
 	<div class="row" *ngFor="let interval of daysInterval" >
 		<h3><b>Volume ({{interval}} {{interval === 1 ? 'day' : 'days'}})</b></h3>
-		<p>${{getPoolVolume(pool, interval)}}</p>
+		<p>${{getPoolVolume(pool, interval)}}</p> <br>
+		<h3><b>TVL</b></h3>
+		<p>{{getPoolTvl(pool, interval)}}</p>
 	</div>  
   
 </mat-dialog-content>
