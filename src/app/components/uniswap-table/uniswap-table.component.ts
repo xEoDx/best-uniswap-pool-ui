@@ -46,7 +46,7 @@ export class UniswapTableComponent implements OnInit {
 
 
     formatLabel(value: number) {
-        return value + ' d';
+        return value + ' D';
     }
     
 
