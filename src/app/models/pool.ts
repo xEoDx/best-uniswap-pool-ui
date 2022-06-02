@@ -1,27 +1,27 @@
 import { Blockchain } from "./blockchain";
 import { Token } from "./token";
+import { PoolVolumeInterval } from "./pool-volume-interval";
 
 export class Pool {
-    private _id: string;
-    private _blockchain: Blockchain;
-    private _feeTier: number;
-    private _tvl: number;
-    private _volume: number;
-    private _token0: Token;
-    private _token1: Token;
+    private static ScoreDollarsMultiplier = 100; 
+    private readonly _id: string;
+    private readonly _blockchain: Blockchain;
+    private readonly _feeTier: number;
+    private readonly _volumes: Array<PoolVolumeInterval>;
+    private readonly _token0: Token;
+    private readonly _token1: Token;
 
-    constructor(id: string, blockchain: Blockchain, feeTier: number, tvl: number, volume: number, token0: Token, token1: Token) {
+    constructor(id: string, blockchain: Blockchain, feeTier: number, volumes: Array<PoolVolumeInterval>, token0: Token, token1: Token) {
         this._id = id;
         this._blockchain = blockchain;
         this._feeTier = feeTier;
-        this._tvl = tvl;
         this._token0 = token0;
         this._token1 = token1;
-        this._volume = volume;
+        this._volumes = volumes;
     }
 
-    public addVolume(volume: number): void {
-        this._volume += volume;
+    public get id(): string{
+        return this._id;
     }
 
     public get feeTier(): number {
@@ -36,26 +36,76 @@ export class Pool {
         return this._token1;
     }
 
-    public get volume(): number {
-        return this._volume;
+    public get volumes(): Array<PoolVolumeInterval> {
+        return this._volumes;
     }
 
-    public get tvl(): number {
-        return this._tvl;
-    }
-
-    public get score(): number {
-        if (this.volume <= 0) {
+    public volume(dayInterval: number):number{
+        const dayData = this.getDayData(dayInterval);
+        if(dayData === undefined) {
             return 0;
         }
-        return (this.feeTier * this.volume / this.tvl) / 100;
+
+        return dayData.volume;
+    }
+
+    public tvl(dayInterval: number): number{
+        const dayData = this.getDayData(dayInterval);
+        if(dayData === undefined) {
+            return 0;
+        }
+
+        return dayData.tvl;
+    }
+
+    public score(dayInterval: number): number {
+        let aggregatedVolume = 0;
+        let aggregatedTvl = 0;
+
+        for(let i = 0; i <= dayInterval; i++){
+            const dayData = this.getDayData(i);
+            if(dayData !== undefined) {
+                aggregatedVolume += dayData.volume;
+                aggregatedTvl += dayData.tvl;
+            }
+        }
+        if(aggregatedTvl === 0 || aggregatedVolume === 0){
+            return 0;
+        }
+
+        const avgTvl = aggregatedTvl / dayInterval;
+        return Pool.ScoreDollarsMultiplier * ((this.feeTier / 100) * (aggregatedVolume / avgTvl)) / dayInterval;
+    }
+
+    public aggregatedVolume(dayInterval: number): number{
+        let aggregatedVolume = 0;
+
+        for(let i = 0; i <= dayInterval; i++){
+            const dayData = this.getDayData(i);
+            if(dayData !== undefined) {
+                aggregatedVolume += dayData.volume;
+            }
+        }
+        return aggregatedVolume;
+    }
+
+    public avgTvl(dayInterval: number): number{
+        let aggregatedTvl = 0;
+
+        for(let i = 0; i <= dayInterval; i++){
+            const dayData = this.getDayData(i);
+            if(dayData !== undefined) {
+                aggregatedTvl += dayData.tvl;
+            }
+        }
+        return aggregatedTvl / dayInterval;
     }
 
     public get blockChain(): Blockchain {
         return this._blockchain;
     }
 
-    public clearVolume(): void {
-        this._volume = 0;
+    private getDayData(dayInterval:number): PoolVolumeInterval | undefined{
+        return this._volumes.find(p => p.interval === dayInterval);
     }
 }

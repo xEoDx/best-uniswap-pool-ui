@@ -1,15 +1,18 @@
 strong {
-	color: whitesmoke;
+    color: whitesmoke;
 }
-p{
-	color: rgb(208, 209, 214);
+
+p {
+    color: rgb(208, 209, 214);
 }
-.blockchain-select-label{
-	padding-left: 5px;
+
+.blockchain-select-label {
+    padding-left: 5px;
 }
 
 .uniswap-table {
-	background-color: rgb(32, 33, 38);
+    background-color: rgb(32, 33, 38);
+    padding: 40px;
 }
 
 .badge {
@@ -38,4 +41,35 @@ p{
     padding-right: 0.6em;
     padding-left: 0.6em;
     border-radius: 10rem;
+}
+
+.pool-row {
+    cursor: pointer;
+}
+
+.days-interval-filter {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    border-color:  #1e1f20 !important;
+    background-color: #202126;
+}
+.second-row-filters {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+mat-slider {
+    width: 400px;
+}
+
+.border-radius-10 {
+    border-radius: 10px;
+
+}
+
+.end-of-table{
+    min-height: 200px;
 }
