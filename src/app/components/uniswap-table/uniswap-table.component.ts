@@ -118,14 +118,15 @@ export class UniswapTableComponent implements OnInit {
         console.log("Blockchain changed: ",$event, " blockchain is: ", this.selectedBlockchain);
         this.gtag.event('filter_pools', {
             method: 'blockchain',
-            specific: blockChainTrackingData
+            specific: blockChainTrackingData,
+            daysInterval: this.selectedInterval
         });
     }
 
     onRiskChanged(risk: any) {
         this.applyFilters();
         const riskTrackingData: string = 'risk-' + this.selectedRisk;
-        this.gtag.event('filter_pools', {method: 'risk', specific: riskTrackingData});
+        this.gtag.event('filter_pools', {method: 'risk', specific: riskTrackingData, daysInterval: this.selectedInterval});
     }
 
     private applyFilters(): void {
@@ -206,7 +207,7 @@ export class UniswapTableComponent implements OnInit {
         }
 
         const poolFilterTrackingData: string = 'pool-name-' + filterName;
-        this.gtag.event('filter_pools', {method: 'name', specific: poolFilterTrackingData});
+        this.gtag.event('filter_pools', {method: 'name', specific: poolFilterTrackingData, daysInterval: this.selectedInterval});
 
         const token0Name = pool.token0.name.toLowerCase();
         const token1Name = pool.token1.name.toLowerCase();
