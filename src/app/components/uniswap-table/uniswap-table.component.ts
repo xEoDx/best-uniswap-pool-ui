@@ -115,7 +115,6 @@ export class UniswapTableComponent implements OnInit {
     onBlockchainChanged($event: any) {
         this.applyFilters();
         const blockChainTrackingData: string = 'blockchain-' + this.selectedBlockchain;
-        console.log("Blockchain changed: ",$event, " blockchain is: ", this.selectedBlockchain);
         this.gtag.event('filter_pools', {
             method: 'blockchain',
             specific: blockChainTrackingData,
