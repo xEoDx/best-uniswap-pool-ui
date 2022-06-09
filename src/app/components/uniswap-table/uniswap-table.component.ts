@@ -87,17 +87,18 @@ export class UniswapTableComponent implements OnInit {
 
         this.sortedData = data.sort((a, b) => {
             const isAsc = sort.direction === 'asc';
+            const interval = Math.max(0, this.selectedInterval - 1);
 
             if (sort.active.includes('score')) {
-                return this.compare(a.score(this.selectedInterval), b.score(this.selectedInterval), isAsc);
+                return this.compare(a.score(interval), b.score(interval), isAsc);
             } else if (sort.active.includes('tvl')) {
-                const Atvl: number = a.volumes.find(v => v.interval === this.selectedInterval)?.tvl ?? 0;
-                const Btvl: number = b.volumes.find(v => v.interval === this.selectedInterval)?.tvl ?? 0;
+                const Atvl: number = a.volumes.find(v => v.interval === interval)?.tvl ?? 0;
+                const Btvl: number = b.volumes.find(v => v.interval === interval)?.tvl ?? 0;
                 return this.compare(Atvl, Btvl, isAsc);
 
             } else if (sort.active.includes('volume')) {
-                const Avol: number = a.volumes.find(v => v.interval === this.selectedInterval)?.volume ?? 0;
-                const Bvol: number = b.volumes.find(v => v.interval === this.selectedInterval)?.volume ?? 0;
+                const Avol: number = a.volumes.find(v => v.interval === interval)?.volume ?? 0;
+                const Bvol: number = b.volumes.find(v => v.interval === interval)?.volume ?? 0;
                 return this.compare(Avol, Bvol, isAsc);
             } else {
                 switch (sort.active) {
@@ -259,7 +260,8 @@ export class UniswapTableComponent implements OnInit {
             return '0';
         }
 
-        const poolScore: number = pool.score(this.selectedInterval);
+        const interval = Math.max(0, this.selectedInterval - 1);
+        const poolScore: number = pool.score(interval);
         if(poolScore > 0){
             return '$'+poolScore.toFixed(6);
         }
@@ -272,19 +274,25 @@ export class UniswapTableComponent implements OnInit {
         if(!this.poolHasIntervalData(pool)){
             return "-";
         }
-        return this.parseDollars(pool.avgTvl(this.selectedInterval));
+        const interval = Math.max(0, this.selectedInterval - 1);
+
+        return this.parseDollars(pool.avgTvl(interval));
     }
     getPoolVolume(pool: Pool): string {
         if(!this.poolHasIntervalData(pool)){
             return "-";
         }
-        return this.parseDollars(pool.aggregatedVolume(this.selectedInterval));
+        const interval = Math.max(0, this.selectedInterval - 1);
+
+        return this.parseDollars(pool.aggregatedVolume(interval));
     }
     poolHasIntervalData(pool: Pool): boolean {
+        const interval = Math.max(0, this.selectedInterval - 1);
+
         return pool.volumes !== undefined &&
-            pool.volumes.length >= this.selectedInterval &&
-            pool.volumes[this.selectedInterval] !== undefined &&
-            pool.volumes[this.selectedInterval].tvl !== undefined &&
-            pool.volumes[this.selectedInterval].volume !== undefined;
+            pool.volumes.length >= interval &&
+            pool.volumes[interval] !== undefined &&
+            pool.volumes[interval].tvl !== undefined &&
+            pool.volumes[interval].volume !== undefined;
     }
 }

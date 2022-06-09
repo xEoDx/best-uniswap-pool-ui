@@ -98,6 +98,7 @@ export class Pool {
                 aggregatedTvl += dayData.tvl;
             }
         }
+        dayInterval = Math.max(1, dayInterval);
         return aggregatedTvl / dayInterval;
     }
 
