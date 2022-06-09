@@ -1,9 +1,9 @@
 strong {
-    color: whitesmoke;
+    color: var(--text);
 }
 
 p {
-    color: rgb(208, 209, 214);
+    color: var(--text);
 }
 
 .blockchain-select-label {
@@ -11,7 +11,7 @@ p {
 }
 
 .uniswap-table {
-    background-color: rgb(32, 33, 38);
+    background-color: var(--darkbackground);
     padding: 40px;
 }
 
@@ -28,12 +28,12 @@ p {
 }
 
 .badge-info {
-    color: #fff;
+    color: var(--text);
     background-color: #17a2b8;
 }
 
 .badge-secondary {
-    color: #fff;
+    color: var(--text);
     background-color: #6c757d;
 }
 
@@ -53,8 +53,7 @@ p {
     padding-top: 10px;
     padding-bottom: 10px;
 
-    border-color:  #1e1f20 !important;
-    background-color: #202126;
+    background-color: var(--darkbackground)
 }
 .second-row-filters {
     padding-top: 30px;
@@ -67,7 +66,7 @@ mat-slider {
 
 .border-radius-10 {
     border-radius: 10px;
-
+    border-color: var(--principalbackground) !important;
 }
 
 .end-of-table{

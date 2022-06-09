@@ -1,8 +1,8 @@
 
 .btn-donation {
-    background-color: #ff8c8c;
+    background-color: var(--secondarybackground);
 }
 
 .btn-donation:hover {
-    background-color: #ffc5c5;
+    background-color: var(--lightbackground);
 }

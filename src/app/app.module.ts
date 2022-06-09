@@ -18,6 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DonationDialogComponent } from './components/donation-dialog/donation-dialog.component';
 import { PoolInfoComponent } from './components/pool-info/pool-info.component';
 import {MatSliderModule} from '@angular/material/slider';
+import {MatIconModule} from '@angular/material/icon';
+
 
 
 @NgModule({
@@ -41,6 +43,7 @@ import {MatSliderModule} from '@angular/material/slider';
     NgSelectModule,
     FormsModule,
     MatSliderModule,
+    MatIconModule,
     GtagModule.forRoot({ trackingId: 'G-LTLKGZLW9W', trackPageviews: true })
 
   ],
