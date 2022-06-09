@@ -72,6 +72,7 @@ export class Pool {
         if(aggregatedTvl === 0 || aggregatedVolume === 0){
             return 0;
         }
+        dayInterval = Math.max(1, dayInterval);
 
         const avgTvl = aggregatedTvl / dayInterval;
         return Pool.ScoreDollarsMultiplier * ((this.feeTier / 100) * (aggregatedVolume / avgTvl)) / dayInterval;
