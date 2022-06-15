@@ -20,7 +20,8 @@ import { PoolInfoComponent } from './components/pool-info/pool-info.component';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatIconModule} from '@angular/material/icon';
 
-
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,8 @@ import {MatIconModule} from '@angular/material/icon';
     FormsModule,
     MatSliderModule,
     MatIconModule,
+    ShareButtonsModule,
+    ShareIconsModule,
     GtagModule.forRoot({ trackingId: 'G-LTLKGZLW9W', trackPageviews: true })
 
   ],

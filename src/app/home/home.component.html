@@ -15,8 +15,19 @@
 
 </div>
 
-<footer class="fixed-footer"> 
-<div class="d-flex justify-content-end div-donate">
+<footer class="row fixed-footer align-items-center">
+<div class="col-11">
+	<share-buttons theme="circles-dark"
+				   [include]="['telegram', 'twitter', 'whatsapp', 'facebook', 'linkedin', 'reddit', 'copy' ]"
+				   [showIcon]="true"
+				   [showText]="false"
+				   url="https://www.poolanalyzer.com"
+				   description="Check out which are the most profitable pools from Uniswap!"
+				   twitterAccount="poolanalyzer"
+				   class="d-flex justify-content-center">
+	</share-buttons>
+</div>
+<div class="col-1">
 	<button class="btn btn-donation" mat-button (click)="openDialog()"><mat-icon>info</mat-icon></button>
 </div>
 
