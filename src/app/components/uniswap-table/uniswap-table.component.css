@@ -55,9 +55,14 @@ p {
 
     background-color: var(--darkbackground)
 }
-.second-row-filters {
-    padding-top: 30px;
-    padding-bottom: 20px;
+.pools-table-filters {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    padding-left: 10px;
+
+    background-color: var(--darkbackground)
 }
 
 mat-slider {

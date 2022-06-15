@@ -6,10 +6,16 @@
 	--secondarybackground: #415A77;
 	--lightbackground: #778DA9;
 	--text: #E0E1DD;
-	--textheader: #ff2c24;
-	--textlightheader: #ff5151;
+	--textheader: #f2de57;
+	--textheader2: #f2be57;
+	--textlightheader: #f2d657;
 }
-html, body { height: 100%; }
+html, body {
+	height: 100%;
+}
+h1 {
+	color: var(--textheader2);
+}
 h2 {
 	color: var(--textheader);
 }
@@ -20,6 +26,11 @@ body {
 	margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
 	background-color: var(--principalbackground);
 	color: var(--text);
+}
+h1.text-title{
+	font-family: Inter, sans-serif;
+	font-weight: 700;
+	font-size: 30px;
 }
 .btn {
 	color: var(--text);
