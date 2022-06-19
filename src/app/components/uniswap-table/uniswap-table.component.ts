@@ -21,11 +21,12 @@ export class UniswapTableComponent implements OnInit {
     nameFilter: string = '';
 
     selectedBlockchain: Blockchain = Blockchain.Ethereum;
-    blockchains = [{id: Blockchain.Ethereum, name: 'Ethereum', icon: 'ethereum.png'}, {
-        id: Blockchain.Polygon,
-        name: 'Polygon',
-        icon: 'polygon.png'
-    }];
+    blockchains = [
+        {id: Blockchain.Ethereum, name: 'Ethereum', icon: 'ethereum.png'},
+        {id: Blockchain.Polygon,  name: 'Polygon',  icon: 'polygon.png'},
+        {id: Blockchain.Optimism,  name: 'Optimism',  icon: 'optimism.png'},
+        {id: Blockchain.Arbitrum,  name: 'Arbitrum',  icon: 'arbitrum.png'},
+    ];
 
     selectedRisk: number = 0;
     risks = [{id: 0, name: 'Low'}, {id: 1, name: 'Moderate'}, {id: 2, name: 'High'}];
@@ -145,17 +146,6 @@ export class UniswapTableComponent implements OnInit {
 
     private isFromBlockchain(pool: Pool, blockchain: Blockchain): boolean {
         return (pool.blockChain + '') === Blockchain[blockchain];
-    }
-
-    private parseBlockchain(blockchain: Blockchain): number {
-        switch (blockchain) {
-            case Blockchain.Ethereum:
-                return 0;
-            case Blockchain.Polygon:
-                return 1;
-            default:
-                return -1;
-        }
     }
 
     private isWithinRisk(pool: Pool, risk: RiskFilter): boolean {
