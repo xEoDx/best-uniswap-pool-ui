@@ -10,6 +10,9 @@
 	--textheader2: #f2be57;
 	--textlightheader: #f2d657;
 }
+h1,h2,h3,h4,p,strong,label, span {
+	font-family: 'Inter', sans-serif !important;
+}
 html, body {
 	height: 100%;
 }
@@ -22,15 +25,19 @@ h2 {
 h3 {
 	color: var(--textlightheader);
 }
+
+/** {*/
+/*	font-family: 'Inter' !* Replace with your custom font *!, sans-serif !important;*/
+/*	!* Add !important to overwrite all elements *!*/
+/*}*/
 body { 
-	margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+	margin: 0;
 	background-color: var(--principalbackground);
 	color: var(--text);
 }
 h1.text-title{
-	font-family: Inter, sans-serif;
-	font-weight: 700;
-	font-size: 30px;
+	font-weight: 600;
+	font-size: 26px;
 }
 .btn {
 	color: var(--text);
