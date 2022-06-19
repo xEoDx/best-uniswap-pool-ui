@@ -25,11 +25,6 @@ h2 {
 h3 {
 	color: var(--textlightheader);
 }
-
-/** {*/
-/*	font-family: 'Inter' !* Replace with your custom font *!, sans-serif !important;*/
-/*	!* Add !important to overwrite all elements *!*/
-/*}*/
 body { 
 	margin: 0;
 	background-color: var(--principalbackground);
