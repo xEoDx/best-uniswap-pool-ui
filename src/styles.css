@@ -20,10 +20,10 @@ h1 {
 	color: var(--textheader2);
 }
 h2 {
-	color: var(--textheader);
+	color: var(--textlightheader);
 }
 h3 {
-	color: var(--textlightheader);
+	color: var(--textheader);
 }
 body { 
 	margin: 0;
