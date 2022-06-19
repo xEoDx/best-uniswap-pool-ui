@@ -6,7 +6,7 @@
             <label for="blockchainSelector" class="col-sm-2 col-form-label">Blockchain</label>
             <div class="col-sm-6">
                 <ng-select name="blockchainSelector" (close)="onBlockchainChanged($event)" [clearable]="false"
-                           [(ngModel)]="selectedBlockchain" >
+                           [(ngModel)]="selectedBlockchain" [searchable]="false" >
                     <ng-option *ngFor="let blockchain of blockchains" [value]="blockchain.id">
                         <img src="assets/{{blockchain.icon}}" width="18" height="18"/>
 
@@ -29,7 +29,7 @@
             <label for="riskSelector" class="col-sm-2 col-form-label">Risk</label>
             <div class="col-sm-6">
 
-                <ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)" [clearable]="false">
+                <ng-select [(ngModel)]="selectedRisk" (close)="onRiskChanged($event)" [clearable]="false" [searchable]="false" >
                     <ng-option *ngFor="let risk of risks" [value]="risk.id">{{risk.name}}</ng-option>
                 </ng-select>
             </div>
