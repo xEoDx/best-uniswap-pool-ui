@@ -26,3 +26,8 @@ footer {
 .main {
     padding-top: 25px;
 }
+
+.twitter-text {
+    padding-left: 25px;
+    color: var(--textheader);
+}
